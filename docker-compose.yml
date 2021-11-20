@@ -1,0 +1,66 @@
+# contains configuration for all the services that make up our sercies
+# version for docker-compose writing folder
+
+version: "3"
+#services taht make up our application for python django applications
+
+services:
+  app: # service
+    build: # section of configuration
+      context: . # current directory where running docker compose
+    ports:
+      - "8000:8000" #map project on host to port on images
+    volumes:
+      - ./app:/app
+      #updates in docker image can be seen in real time
+      # from local macine into docker container
+      # if change file in host, automatically mounted
+      # command to run our application in a docker container, use > to break command into the next line
+
+      # run the django development server on all ip addresses that run on the docker container and run on port 8000, map
+      #mapped from the port configuration to the 8000 on our machine
+      # we can connect to the appliation in our host machine
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:80000"
+
+# docker-compose build
+# builds our image using docker compose configurations
+# aloine image is small, most should be cached on our system
+# tagged with the folder that we are currently in
+
+
+
+#mount a volume from host to container for use by apache as www user.
+#The problem is currently all mounts are mounted as root inside the container.
+    # user: $UID:$GID
+    #Change the ownership of your app/ directory to your user by running
+    #chown -R $(whoami):$(whoami) app/
+    #Now run export UID=${UID} && export GID=${GID} in the terminal to set your UID and GID variables (if you don't do this then you'll see a warning saying these values were not set when running docker).
+    # Run the command again: docker-compose run app sh -c "django-admin.py startproject app .".
+    # The drawback / issue with this solution is that step 3 needs to be ran every time you load a new terminal window. There are a few workarounds to this.
+
+# One is adding the export lines to your .bash_profile file so they are ran automatically each time you start a new terminal.
+
+
+
+# create a Django project using the Docker configuration that we created
+
+# We used Docker compose to run a command on our image that contains the Django dependency
+# and that will create the project files that we need for our app.
+
+# docker-compose run app sh -c "django-admin.py startproject app ."
+# then the name of the service you want to run the command on.. this is i fyou have multpile services.
+# then what we right after is whatever command that will be run on our linux container
+
+
+# shell script - command
+
+
+
+# What this does is it just runs the Django admin management command that comes when you install Django
+
+# which we do via our requirements here and it runs the start project command and it starts a new project
+
+# called app and it says start the project in our current location now because this process is going
+
+# to run on our Docker container it's going to base it from the last workdir that we set in our Docker file.
